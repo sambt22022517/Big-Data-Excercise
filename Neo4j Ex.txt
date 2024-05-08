@@ -1,0 +1,32 @@
+1.
+match (c:Course)-[:TAKESPLACEIN]->(r:Room)
+where c.courseNr = '1'
+return r.roomName, c.courseName
+
+2.
+match (s:Student)-[r:WORKSON]->(p:Project)
+where s.studentID = '1'
+return s.firstName, p, r.hours
+
+3.
+match (s:Student)-[r:WORKSON]->(p:Project)
+where p.projectNr = '24'
+return p.projectName, s.lastName, r.hours
+
+4.
+match (s:Student)-[r:WORKSON]->(p:Project)
+return p.projectName, s.lastName, r.hours
+order by s.lastName
+limit 4
+
+5.
+MATCH (s:Student)-[:WORKSON]->(p:Project)
+WITH s, COUNT(p) AS projectCount
+WHERE projectCount > 2
+RETURN s.lastName AS LastName, projectCount AS NumberOfProjects
+ORDER BY projectCount
+
+6.
+MATCH (s1:Student)-[:WORKSON]->(p:Project)<-[:WORKSON]-(s2:Student)
+WHERE s1.lastName = s2.lastName AND ID(s1) < ID(s2)
+RETURN s1.firstName, s2.firstName, p.projectName
